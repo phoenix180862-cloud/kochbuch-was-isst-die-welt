@@ -38,6 +38,7 @@
     plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>',
     info: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>',
     wuerfel: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="9" cy="9" r="1.2" fill="currentColor"/><circle cx="15" cy="15" r="1.2" fill="currentColor"/><circle cx="15" cy="9" r="1.2" fill="currentColor"/><circle cx="9" cy="15" r="1.2" fill="currentColor"/></svg>',
+    haus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>',
     buch: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2Z"/><path d="M4 19V5M8 7h7"/></svg>'
   };
 
@@ -775,7 +776,7 @@ ${legendenHTML()}
           <input id="suche" type="search" placeholder="Gericht, Zutat, Land oder Koch suchen" autocomplete="off">
         </form>
         <nav class="nav" aria-label="Hauptnavigation">
-          <a href="#/" title="Regal" data-nav="start">${I.buch}<span class="txt">Regal</span></a>
+          <a href="#/" title="Startseite – Bücherregal" data-nav="start">${I.haus}<span class="txt">Start</span></a>
           <a href="#/baukasten" title="Baukasten" data-nav="baukasten">${I.liste}<span class="txt">Baukasten</span></a>
           <a class="nur-privat" href="#/ki" title="KI-Menü" data-nav="ki">${I.ki}<span class="txt">KI-Menü</span></a>
           <a href="#/koeche" title="Köche" data-nav="koeche">${I.koch}<span class="txt">Köche</span></a>
@@ -826,8 +827,10 @@ ${legendenHTML()}
     else if (ziel === 'rundgang') { p = seiteStart(main); setTimeout(() => rundgang(0), 700); }
     else p = seiteStart(main);
     Promise.resolve(p).then(() => {
-      if (!KB._scrollMerken) window.scrollTo(0, 0);
+      if (KB._scrollZiel != null) { const y = KB._scrollZiel; KB._scrollZiel = null; setTimeout(() => window.scrollTo(0, y), 60); setTimeout(() => window.scrollTo(0, y), 600); }
+      else if (!KB._scrollMerken) window.scrollTo(0, 0);
       KB._scrollMerken = false;
+      merker.setz({ hash: location.hash || '#/', y: 0 });
       rundgangKnopf(!ziel || ziel === 'rundgang');
       document.title = (main.dataset.titel ? main.dataset.titel + ' – ' : '') + 'Was isst die Welt?';
     });
@@ -1099,6 +1102,7 @@ ${legendenHTML()}
     $('#einkauf').onclick = () => { einkauf.hinzu(r, portionen); meldung('Zutaten für ' + portionen + ' Portionen auf der Einkaufsliste'); };
     $('#drucken').onclick = () => window.print();
     $('#km-start').onclick = () => kochmodus(r, () => portionen, false);
+    if (KB._kmWieder && KB._kmWieder.id === r.id) { const st = KB._kmWieder.schritt; KB._kmWieder = null; setTimeout(() => kochmodus(r, () => portionen, false, st), 300); }
     $('#km-sprachstart').onclick = () => kochmodus(r, () => portionen, true);
     $$('.timer-knopf', main).forEach(b => b.onclick = () => timer.start(+b.dataset.dauer * 60, r.name + ': ' + b.dataset.was));
   }
@@ -1114,8 +1118,8 @@ ${legendenHTML()}
   /* ---------- Kochmodus (Lesen) und Sprachkochen (Vorlesen + Sprachbefehle) ---------- */
   let wachHalten = null;
   const KOMMANDO_TEXT = { stopp: 'Stopp', weiter: 'Weiter', naechster: 'Nächster Schritt', zurueck: 'Zurück', nochmal: 'Nochmal', zutaten: 'Zutaten', timer: 'Timer', lauter: 'Lauter', leiser: 'Leiser', beenden: 'Beenden' };
-  async function kochmodus(r, portionenFn, mitSprache) {
-    let i = 0, sprache = false, letztesSprechEnde = 0, ersterHinweis = true;
+  async function kochmodus(r, portionenFn, mitSprache, startSchritt = 0) {
+    let i = Math.max(0, Math.min(startSchritt, r.schritte.length - 1)), sprache = false, letztesSprechEnde = 0, ersterHinweis = true;
     const n = r.schritte.length;
     const f = portionenFn() / r.portionen;
     const el = document.createElement('div');
@@ -1174,6 +1178,7 @@ ${legendenHTML()}
 
     function zeige(vorlesen = true) {
       const s = r.schritte[i];
+      merker.setz({ km: { id: r.id, schritt: i } });
       q('#km-fs').style.width = ((i + 1) / n * 100) + '%';
       q('#km-inhalt').innerHTML = `<div class="km-schritt">
         <div class="km-bild">${KB.schrittbild(s.aktion, r.farben, r.id + i)}</div>
@@ -1195,6 +1200,7 @@ ${legendenHTML()}
       if (sprache) KB.sprecher.kurz('Timer für ' + zeitText(s.dauer).replace('Min.', 'Minuten').replace('Std.', 'Stunden') + ' läuft.');
     }
     function schliessen() {
+      merker.setz({ km: null });
       spracheAus(); el.remove(); document.body.style.overflow = '';
       document.removeEventListener('keydown', taste);
       KB.sprecher.onZustand = null; KB._timerHinweis = null;
@@ -1481,11 +1487,34 @@ ${legendenHTML()}
     }).catch(() => { const ab = $('#ki-ablauf'); if (ab) ab.innerHTML = ''; });
   }
 
+  /* ---------- Merker: letzte Seite, Scrollstelle und Kochmodus-Schritt überleben das Schließen der App ---------- */
+  const merker = {
+    hol() { try { return JSON.parse(localStorage.getItem('zuletzt') || '{}'); } catch (e) { return {}; } },
+    setz(teil) { try { localStorage.setItem('zuletzt', JSON.stringify({ ...this.hol(), ...teil, zeit: Date.now() })); } catch (e) {} }
+  };
+  let scrollWarte;
+  const merkeScroll = () => merker.setz({ hash: location.hash || '#/', y: Math.round(scrollY) });
+  addEventListener('scroll', () => { clearTimeout(scrollWarte); scrollWarte = setTimeout(merkeScroll, 300); }, { passive: true });
+  addEventListener('pagehide', merkeScroll);
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') merkeScroll(); });
+  function wiederherstellen() {
+    let neueSitzung = true;
+    try { neueSitzung = !sessionStorage.getItem('sitzung'); sessionStorage.setItem('sitzung', '1'); } catch (e) {}
+    const z = merker.hol(), h = location.hash.replace(/^#\/?/, '');
+    if (!neueSitzung || h || !z.hash || z.hash === '#/' || z.hash === '#' || /^#\/(ansicht|rundgang)/.test(z.hash)) return false;
+    if (z.km && z.km.id && z.hash === '#/rezept/' + z.km.id) KB._kmWieder = z.km;
+    KB._scrollZiel = z.y || 0;
+    history.replaceState(null, '', z.hash);
+    setTimeout(() => meldung(z.km ? 'Weiter, wo du aufgehört hast – Kochmodus Schritt ' + (z.km.schritt + 1) : 'Weiter, wo du aufgehört hast'), 900);
+    return true;
+  }
+
   /* ---------- Start ---------- */
   function los() {
     rahmen();
     if (!KB.INDEX || !KB.INDEX.length) { $('#inhalt').innerHTML = '<div class="leer-hinweis">Das Rezeptregister konnte nicht geladen werden.</div>'; return; }
     vorbereiten();
+    wiederherstellen();
     window.addEventListener('hashchange', route);
     route();
     if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});

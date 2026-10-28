@@ -906,3 +906,16 @@ h2.zwischen { font-family: var(--logo); font-weight: 600; margin: 24px 0 8px; }
 @media (max-width: 700px) {
   .heute-karte .heute-schild { position: static; max-width: none; border-radius: 0 0 20px 20px; border-width: 1px 0 0; }
 }
+[hidden] { display: none !important; }
+/* Kochmodus auf dem Handy: nichts mehr über den Rand */
+.kochmodus { grid-template-columns: minmax(0, 1fr); }
+.kochmodus > * { min-width: 0; }
+@media (max-width: 700px) {
+  .km-kopf { gap: 8px; padding: 8px 10px; }
+  .km-kopf .knopf { padding: 0 10px; }
+  .km-kopf .km-sprachknopf span, .km-kopf .txt-z { display: none; }
+  .km-kopf .titel { font-size: 16px; }
+  .km-inhalt { padding: 16px 14px; }
+  .km-fuss { padding: 10px; }
+  .km-fuss .knopf { font-size: 16px; }
+}
