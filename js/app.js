@@ -427,7 +427,7 @@ ${legendenHTML()}
         <div class="loeffel-rahmen"><div class="loeffel"><img src="bilder/loeffel.svg" alt="">${logo().replace('logo-container', 'logo-container lg')}</div></div>
         <nav class="start-nav" aria-label="Werkzeuge">
           <button class="knopf-n" id="info-auf" type="button">${I.info}Über das Buch</button>
-          <a class="knopf-n" href="#/koeche">${I.koch}Köche</a>
+          <a class="knopf-n nur-privat" href="#/koeche">${I.koch}Köche</a>
           <a class="knopf-n" href="#/favoriten">${I.herz}Favoriten<span class="zahl" id="zahl-fav2" hidden></span></a>
           <a class="knopf-n" href="#/einkauf">${I.korb}Einkaufsliste<span class="zahl" id="zahl-einkauf2" hidden></span></a>
         </nav>
@@ -515,7 +515,7 @@ ${legendenHTML()}
     const s = buchSeiten(b);
     const alle = rezepteIm(b).slice().sort((x, y) => y.b - x.b);
     const top = alle.find(r => r.g === 'hauptgericht') || alle[0];
-    const koeche = b.sonder ? [] : KB.KOECHE.filter(k => (k.kueche || []).includes(b.id)).sort((x, y) => y._rez.length - x._rez.length).slice(0, 6);
+    const koeche = (b.sonder || !PRIVAT) ? [] : KB.KOECHE.filter(k => (k.kueche || []).includes(b.id)).sort((x, y) => y._rez.length - x._rez.length).slice(0, 6);
     const hz = {}; alle.forEach(r => hz[r.h] = (hz[r.h] || 0) + 1);
     main.innerHTML = `<a class="zurueck no-print" href="#/">${I.pfeilL} Zum Bücherregal</a>
       <div class="buch-offen" style="--einband:${b.bg};--akzent:${b.ak}">
@@ -779,7 +779,7 @@ ${legendenHTML()}
           <a href="#/" title="Startseite – Bücherregal" data-nav="start">${I.haus}<span class="txt">Start</span></a>
           <a href="#/baukasten" title="Baukasten" data-nav="baukasten">${I.liste}<span class="txt">Baukasten</span></a>
           <a class="nur-privat" href="#/ki" title="KI-Menü" data-nav="ki">${I.ki}<span class="txt">KI-Menü</span></a>
-          <a href="#/koeche" title="Köche" data-nav="koeche">${I.koch}<span class="txt">Köche</span></a>
+          <a class="nur-privat" href="#/koeche" title="Köche" data-nav="koeche">${I.koch}<span class="txt">Köche</span></a>
           <a href="#/favoriten" title="Favoriten" data-nav="favoriten">${I.herz}<span class="txt">Favoriten</span><span class="zahl" id="zahl-fav" hidden></span></a>
           <a href="#/einkauf" title="Einkauf" data-nav="einkauf">${I.korb}<span class="txt">Einkauf</span><span class="zahl" id="zahl-einkauf" hidden></span></a>
         </nav>
@@ -842,7 +842,7 @@ ${legendenHTML()}
     ['.start-kopf2', 'Suchen & planen', 'Hier findest du jedes Gericht nach Name, Zutat, Land oder Koch. Der Menü-Baukasten stellt dir ein ganzes Menü zusammen – mit Seitenangaben und fertiger Einkaufsliste.'],
     ['section[aria-labelledby="k-sonder"]', 'Die Sonderbände', 'Quer durch alle Küchen: Suppen & Eintöpfe, Backbuch, Desserts, Frühstück, Grillen, Street Food und Festtagsküche.'],
     ['section[aria-labelledby="k-europa"] .leiste, section[aria-labelledby="k-europa"] .reihen-breit .reihe', 'Jedes Land ein eigenes Buch', 'Alle Länder der Welt stehen nach Kontinenten im Regal. Tipp ein Buch an – es schlägt sich auf, mit Inhaltsverzeichnis, Kapiteln und Seitenzahlen.'],
-    ['.buehne', 'Die Sterneköche jedes Kontinents', PRIVAT ? 'Bei jedem Kontinent wartet sein Star-Koch. Ein Tipp auf die Figur oder den gelben Knopf zeigt alle seine Spezialrezepte, schön nach Gängen sortiert.' : 'Bei jedem Kontinent wartet ein Sternekoch. Die Figuren sind frei erfunden – echte Personen zeigen wir aus rechtlichen Gründen nicht. Dahinter stecken Spezialrezepte nach Art weltberühmter Sterneköche, für die Heimküche nachgekocht. Bei jedem Rezept steht, wessen Küche das Vorbild ist.'],
+    ['.buehne', 'Die Sterneköche jedes Kontinents', PRIVAT ? 'Bei jedem Kontinent wartet sein Star-Koch. Ein Tipp auf die Figur oder den gelben Knopf zeigt alle seine Spezialrezepte, schön nach Gängen sortiert.' : 'Bei jedem Kontinent wartet ein Sternekoch. Die Figuren sind frei erfunden. Ein Tipp auf die Figur oder den gelben Knopf zeigt seine Spezialrezepte aus der Sterneküche – für die Heimküche erklärt und nach Gängen sortiert.'],
     ['#heute-knopf', 'Was kochen wir heute?', 'Keine Idee? Hier gibt es jeden Tag neue Vorschläge – schnell, leicht, deftig oder einmal um die Welt. Jedes Rezept erklärt dir jeden Handgriff, mit Kochmodus, Zeitmessern und auf Wunsch sogar mit Sprachsteuerung. Guten Appetit!'],
   ];
   const sichtbar = sel => $$(sel).find(e => e.offsetParent !== null && e.getBoundingClientRect().height > 0);
@@ -1361,7 +1361,7 @@ ${legendenHTML()}
       <div class="kachel abschnitt koch-kopf${leg ? ' mit-bild' : ''}">
         ${leg ? `<img class="koch-portrait" src="bilder/${leg[1]}.svg" alt="${esc(leg[2])}">` : `<span class="monogramm" style="width:96px;height:96px;font-size:34px" aria-hidden="true">${monogramm(k.name)}</span>`}
         <div><h1 style="font-family:var(--lese);font-size:34px;margin:0;line-height:1.15">${esc(oeff ? st.titel : k.name)}</h1>
-          ${oeff ? `<p>Spezialrezepte nach Art eines der berühmtesten Köche aus ${esc(st.aus)} – als eigene Heimküchen-Fassungen nachgekocht und Schritt für Schritt erklärt. Bei jedem Rezept steht, wessen Küche das Vorbild ist, mit Quelle. Die Figur ist frei erfunden.</p>`
+          ${oeff ? `<p>Spezialrezepte aus der Sterneküche – als Heimküchen-Fassungen Schritt für Schritt erklärt. Die Figur ist frei erfunden.</p>`
           : `<div style="color:var(--tinte-3)">${esc(k.land || '')}${k.stil ? ' · ' + esc(k.stil) : ''}</div>
           <p>${esc(k.kurzbio)}</p>`}
           ${rez.length ? `<a class="knopf-spezial" href="#koch-rezepte">${I.buch} ${rez.length} ${rez.length === 1 ? 'Spezialrezept' : 'Spezialrezepte'} ansehen</a>` : ''}

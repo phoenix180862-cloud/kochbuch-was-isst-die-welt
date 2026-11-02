@@ -90,6 +90,7 @@ Quelle: `tw-business-suite/kochbuch/` · Verpackung: `kochbuch/werkstatt/werkzeu
 - Kochbuch hat bewusst **keine Hilfe-Funktion** (Ausnahme laut Anweisung Abschnitt 6).
 - Den KI-Menüplaner gibt es nur in Thomas’ privater Fassung; hier nur Menü-Baukasten ohne KI.
 - Keine fremden Rezeptfotos – nur eigene Bilder bzw. eigene Illustrationen.
+- **Keine Namen echter Köche** in der öffentlichen Fassung (Freigabe Thomas 02.11.2026): nach jedem Verpacken `node werkzeug/namen_frei.js daten` laufen lassen (gehört als letzter Schritt in `frei_paket.py`). Die 13 Bühnen-Köche erscheinen nur als frei erfundene Figuren, der Menüpunkt „Köche“ ist öffentlich ausgeblendet.
 
 ### Für alle Geschenk-Fassungen gilt
 - **Dieses Repo wird erzeugt.** Quelle ist der zugehörige Ordner im privaten Repo `tw-business-suite` (Verpackungsskript `frei_paket.py`). Fehler und Verbesserungen **dort** beheben und neu verpacken – Änderungen nur hier gehen beim nächsten Paket verloren. Ausnahme: dringende Fehlerbehebung hier **und** gleichzeitig in der Quelle.
