@@ -6,7 +6,7 @@ window.TW_VIDEOS = [
   "datei": "videos/schnellstart.mp4",
   "untertitel": "videos/schnellstart.vtt",
   "dauer": 51,
-  "bytes": 594896
+  "bytes": 638589
  },
  {
   "id": "aufnahme",
@@ -14,7 +14,7 @@ window.TW_VIDEOS = [
   "datei": "videos/aufnahme.mp4",
   "untertitel": "videos/aufnahme.vtt",
   "dauer": 50,
-  "bytes": 632138
+  "bytes": 626440
  },
  {
   "id": "plan",
@@ -22,7 +22,7 @@ window.TW_VIDEOS = [
   "datei": "videos/plan.mp4",
   "untertitel": "videos/plan.vtt",
   "dauer": 47,
-  "bytes": 738044
+  "bytes": 702683
  },
  {
   "id": "material-einkauf",
@@ -30,15 +30,15 @@ window.TW_VIDEOS = [
   "datei": "videos/material-einkauf.mp4",
   "untertitel": "videos/material-einkauf.vtt",
   "dauer": 51,
-  "bytes": 537435
+  "bytes": 502536
  },
  {
   "id": "ausfuehren",
   "titel": "Schritt für Schritt ausführen",
   "datei": "videos/ausfuehren.mp4",
   "untertitel": "videos/ausfuehren.vtt",
-  "dauer": 46,
-  "bytes": 840173
+  "dauer": 47,
+  "bytes": 876113
  },
  {
   "id": "mein-haus",
@@ -46,6 +46,6 @@ window.TW_VIDEOS = [
   "datei": "videos/mein-haus.mp4",
   "untertitel": "videos/mein-haus.vtt",
   "dauer": 39,
-  "bytes": 487179
+  "bytes": 476647
  }
 ];

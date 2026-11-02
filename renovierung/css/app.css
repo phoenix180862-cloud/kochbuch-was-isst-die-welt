@@ -398,3 +398,8 @@ dialog::backdrop { background: rgba(5,10,16,.7); backdrop-filter: blur(3px); }
 .schritt-foto { margin: 12px 0 4px; }
 .schritt-foto img { width: 100%; max-width: 720px; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 10px; display: block; }
 .schritt-foto figcaption { font-size: 12.5px; color: var(--text-3); margin-top: 4px; }
+/* Kleine Vorschaubilder (Treffer, Vorhaben-Liste, Kopf): nur Foto + kurzes „KI“-Zeichen, kein überlagerter Titel */
+:is(.treffer-haupt, .vorhaben-zeile, .vh-kopf) .foto .foto-titel-bild,
+:is(.treffer-haupt, .vorhaben-zeile, .vh-kopf) .foto:has(.foto-titel-bild)::after { display: none; }
+:is(.treffer-haupt, .vorhaben-zeile, .vh-kopf) .foto .foto-nachweis { font-size: 0; padding: 1px 5px; right: 4px; top: 4px; }
+:is(.treffer-haupt, .vorhaben-zeile, .vh-kopf) .foto .foto-nachweis::before { content: 'KI'; font-size: 10px; font-weight: 700; letter-spacing: .5px; }

@@ -1,0 +1,17 @@
+css/app.css
+index.html
+js/stand.js
+js/videos.js
+sw.js
+videos/aufnahme.mp4
+videos/aufnahme.vtt
+videos/ausfuehren.mp4
+videos/ausfuehren.vtt
+videos/material-einkauf.mp4
+videos/material-einkauf.vtt
+videos/mein-haus.mp4
+videos/mein-haus.vtt
+videos/plan.mp4
+videos/plan.vtt
+videos/schnellstart.mp4
+videos/schnellstart.vtt

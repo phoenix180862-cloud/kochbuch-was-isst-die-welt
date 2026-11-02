@@ -1,6 +1,6 @@
 /* TW Renovierungs-App – Offline-Speicher. Versionsstempel bei jeder Änderung erhöhen. */
-const STAND = 'twreno-20261102-2330';
-const V = '?v=20261102-2330';
+const STAND = 'twreno-20261102-2345';
+const V = '?v=20261102-2345';
 const KERN = ['./', 'index.html', 'manifest.json', 'icon-192.png', 'icon-512.png', 'favicon-32.png', 'apple-touch-icon.png', 'bilder/tw-logo.jpg', 'bilder/korn.png',
   'schrift/oswald-latin-500-normal.woff2', 'schrift/oswald-latin-600-normal.woff2', 'schrift/source-sans-3-latin-400-normal.woff2', 'schrift/source-sans-3-latin-600-normal.woff2', 'schrift/source-sans-3-latin-700-normal.woff2',
   'css/app.css' + V, 'frei-config.js' + V, ...['rechner', 'katalog-basis', 'katalog-waende', 'katalog-boden-sanitaer', 'katalog-haus', 'katalog-innen2', 'katalog-haus2', 'bilder', 'videos', 'stand', 'speicher', 'ki', 'hilfe', 'app'].map(n => 'js/' + n + '.js' + V)];
