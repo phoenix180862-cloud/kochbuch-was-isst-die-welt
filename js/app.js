@@ -773,7 +773,7 @@ ${legendenHTML()}
         <a class="marke" href="#/" aria-label="Zur Startseite – Bücherregal"><span class="tt tt-kopf">${TITEL_HTML}</span>${logo(true)}</a>
         <form class="suche-feld" role="search" id="suchform">
           ${I.suche}<label class="versteckt" for="suche">Suchen</label>
-          <input id="suche" type="search" placeholder="Gericht, Zutat, Land oder Koch suchen" autocomplete="off">
+          <input id="suche" type="search" placeholder="${PRIVAT ? 'Gericht, Zutat, Land oder Koch suchen' : 'Gericht, Zutat oder Land suchen'}" autocomplete="off">
         </form>
         <nav class="nav" aria-label="Hauptnavigation">
           <a href="#/" title="Startseite – Bücherregal" data-nav="start">${I.haus}<span class="txt">Start</span></a>
@@ -839,7 +839,7 @@ ${legendenHTML()}
   /* ---------- Rundgang: dezenter Begleiter für Besucher (z. B. über den Link auf der Firmen-Webseite) ---------- */
   const RUNDGANG = [
     ['.legenden', 'Willkommen!', PRIVAT ? 'Das ist „Was isst die Welt?“ – das Weltkochbuch von Thomas Willwacher. Ganz oben steht Paul Bocuse, der Koch des Jahrhunderts. Tipp ihn an, dann öffnen sich seine Spezialrezepte.' : 'Das ist „Was isst die Welt?“ – das Weltkochbuch von Thomas Willwacher. Ganz oben steht der Meisterkoch Frankreichs. Tipp ihn an, dann öffnen sich seine Spezialrezepte.'],
-    ['.start-kopf2', 'Suchen & planen', 'Hier findest du jedes Gericht nach Name, Zutat, Land oder Koch. Der Menü-Baukasten stellt dir ein ganzes Menü zusammen – mit Seitenangaben und fertiger Einkaufsliste.'],
+    ['.start-kopf2', 'Suchen & planen', (PRIVAT ? 'Hier findest du jedes Gericht nach Name, Zutat, Land oder Koch.' : 'Hier findest du jedes Gericht nach Name, Zutat oder Land.') + ' Der Menü-Baukasten stellt dir ein ganzes Menü zusammen – mit Seitenangaben und fertiger Einkaufsliste.'],
     ['section[aria-labelledby="k-sonder"]', 'Die Sonderbände', 'Quer durch alle Küchen: Suppen & Eintöpfe, Backbuch, Desserts, Frühstück, Grillen, Street Food und Festtagsküche.'],
     ['section[aria-labelledby="k-europa"] .leiste, section[aria-labelledby="k-europa"] .reihen-breit .reihe', 'Jedes Land ein eigenes Buch', 'Alle Länder der Welt stehen nach Kontinenten im Regal. Tipp ein Buch an – es schlägt sich auf, mit Inhaltsverzeichnis, Kapiteln und Seitenzahlen.'],
     ['.buehne', 'Die Sterneköche jedes Kontinents', PRIVAT ? 'Bei jedem Kontinent wartet sein Star-Koch. Ein Tipp auf die Figur oder den gelben Knopf zeigt alle seine Spezialrezepte, schön nach Gängen sortiert.' : 'Bei jedem Kontinent wartet ein Sternekoch. Die Figuren sind frei erfunden. Ein Tipp auf die Figur oder den gelben Knopf zeigt seine Spezialrezepte aus der Sterneküche – für die Heimküche erklärt und nach Gängen sortiert.'],
