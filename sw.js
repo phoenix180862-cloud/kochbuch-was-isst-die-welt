@@ -1,8 +1,8 @@
 /* „Was isst die Welt?“ – Offline-Speicher: einmal geöffnete Seiten und Küchen funktionieren auch ohne Netz */
-const STAND = 'weltkochbuch-20261102-1830';
-const KERN = ['./', 'index.html', 'frei-config.js?v=20261102-1830', 'css/app.css?v=20261102-1830', 'js/kuechen.js?v=20261102-1830', 'js/muster.js?v=20261102-1830',
-  'js/bilder.js?v=20261102-1830', 'js/ki.js?v=20261102-1830', 'js/sprache.js?v=20261102-1830', 'js/app.js?v=20261102-1830', 'daten/index.js?v=20261102-1830', 'manifest.json', 'icon-192.png', 'bilder/loeffel.svg'];
-self.addEventListener('install', e => { e.waitUntil(caches.open(STAND).then(c => c.addAll(KERN)).then(() => self.skipWaiting())); });
+const STAND = 'weltkochbuch-20261102-1900';
+const KERN = ['./', 'index.html', 'frei-config.js?v=20261102-1900', 'css/app.css?v=20261102-1900', 'js/kuechen.js?v=20261102-1900', 'js/muster.js?v=20261102-1900',
+  'js/bilder.js?v=20261102-1900', 'js/ki.js?v=20261102-1900', 'js/sprache.js?v=20261102-1900', 'js/app.js?v=20261102-1900', 'daten/index.js?v=20261102-1900', 'manifest.json', 'icon-192.png', 'bilder/loeffel.svg'];
+self.addEventListener('install', e => { e.waitUntil(caches.open(STAND).then(c => c.addAll(KERN.map(u => new Request(u, { cache: 'reload' })))).then(() => self.skipWaiting())); });
 self.addEventListener('activate', e => {
   e.waitUntil(caches.keys().then(l => Promise.all(l.filter(k => k.startsWith('weltkochbuch-') && k !== STAND).map(k => caches.delete(k)))).then(() => self.clients.claim()));
 });
