@@ -1,0 +1,3 @@
+AddType text/vtt .vtt
+AddType application/manifest+json .webmanifest
+AddType font/woff2 .woff2

@@ -1,0 +1,23 @@
+TW Renovierungs-App – Lizenzen
+==============================
+
+Programmcode, Texte und Inhalte der App
+  © 2026 Thomas Willwacher Fliesenlegermeister e.K. Kostenlos nutzbar, ohne Gewähr.
+  Keine fremden Programmbibliotheken.
+
+Firmenlogo (bilder/tw-logo.jpg)
+  © Thomas Willwacher Fliesenlegermeister e.K. Alle Rechte vorbehalten. Nicht verändern.
+
+Schriften (Ordner schrift/, lokal eingebunden, keine Verbindung zu Google)
+  Oswald – Copyright 2016 The Oswald Project Authors (https://github.com/googlefonts/OswaldFont)
+  Source Sans 3 – Copyright 2010–2020 Adobe (http://www.adobe.com/), with Reserved Font Name 'Source'.
+  Beide lizenziert unter der SIL Open Font License, Version 1.1: https://openfontlicense.org
+
+Fotos (Ordner bilder/fotos/)
+  Fotorealistische KI-generierte Bilder, erstellt im Auftrag von Thomas Willwacher Fliesenlegermeister e.K.
+  (Freigabe 02.11.2026), in der App als „KI-generiert (fotorealistisch)“ gekennzeichnet.
+  Bildnachweise stehen in der App unter „Über diese App“ → Bildnachweis.
+
+Erklärvideos (Ordner videos/)
+  Bildschirmaufnahmen dieser App, © Thomas Willwacher Fliesenlegermeister e.K. Keine Musik, keine Stimmen Dritter.
+  Die Sprecherstimme erzeugt beim Abspielen die Sprachausgabe des jeweiligen Geräts.
