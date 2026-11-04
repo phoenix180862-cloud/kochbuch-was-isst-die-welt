@@ -1,7 +1,7 @@
 /* „Was isst die Welt?“ – Offline-Speicher: einmal geöffnete Seiten und Küchen funktionieren auch ohne Netz */
-const STAND = 'weltkochbuch-20261102-1900';
-const KERN = ['./', 'index.html', 'frei-config.js?v=20261102-1900', 'css/app.css?v=20261102-1900', 'js/kuechen.js?v=20261102-1900', 'js/muster.js?v=20261102-1900',
-  'js/bilder.js?v=20261102-1900', 'js/ki.js?v=20261102-1900', 'js/sprache.js?v=20261102-1900', 'js/app.js?v=20261102-1900', 'daten/index.js?v=20261102-1900', 'manifest.json', 'icon-192.png', 'bilder/loeffel.svg'];
+const STAND = 'weltkochbuch-20261104-1200';
+const KERN = ['./', 'index.html', 'frei-config.js?v=20261104-1200', 'css/app.css?v=20261104-1200', 'js/kuechen.js?v=20261104-1200', 'js/muster.js?v=20261104-1200',
+  'js/bilder.js?v=20261104-1200', 'js/ki.js?v=20261104-1200', 'js/sprache.js?v=20261104-1200', 'js/app.js?v=20261104-1200', 'daten/index.js?v=20261104-1200', 'lib/tw-version.js?v=20261104-1200', 'manifest.json', 'icon-192.png', 'bilder/loeffel.svg'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(STAND).then(c => c.addAll(KERN.map(u => new Request(u, { cache: 'reload' })))).then(() => self.skipWaiting())); });
 self.addEventListener('activate', e => {
   e.waitUntil(caches.keys().then(l => Promise.all(l.filter(k => k.startsWith('weltkochbuch-') && k !== STAND).map(k => caches.delete(k)))).then(() => self.clients.claim()));
@@ -9,6 +9,7 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   const url = new URL(e.request.url);
   if (e.request.method !== 'GET' || url.hostname === 'generativelanguage.googleapis.com') return;
+  if (url.searchParams.has('twv')) return; // Versionsprüfung (lib/tw-version.js) immer direkt vom Server, nie speichern
   e.respondWith(caches.match(e.request).then(treffer => treffer || fetch(e.request).then(antwort => {
     if (antwort.ok && (url.origin === location.origin || url.hostname.endsWith('gstatic.com') || url.hostname.endsWith('googleapis.com'))) {
       const kopie = antwort.clone(); caches.open(STAND).then(c => c.put(e.request, kopie));

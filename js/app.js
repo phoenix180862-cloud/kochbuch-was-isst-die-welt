@@ -122,10 +122,10 @@
   }
 
   /* ---------- Titel-Schriftzug und Logo ---------- */
-  /* Private Ansicht (Thomas' Geräte mit Gemini-Schlüssel): echte Köche als Karikaturen + KI-Menü.
+  /* Private Ansicht (Thomas' Geräte, Merker tw_ki_privat): echte Köche als Karikaturen + KI-Menü.
      Öffentliche Ansicht (alle anderen): frei erfundene Koch-Figuren, kein KI-Menü. Umschalten: #/ansicht/oeffentlich bzw. #/ansicht/privat */
   /* Öffentliche Fassung (Geschenk auf der Firmen-Webseite): frei-config.js setzt window.TW_FREI = true → immer öffentliche Ansicht */
-  const PRIVAT = (() => { try { return !window.TW_FREI && !!(localStorage.getItem('gemini_api_key') || '').trim() && localStorage.getItem('ansicht') !== 'oeffentlich'; } catch (e) { return false; } })();
+  const PRIVAT = (() => { try { return !window.TW_FREI && !!(window.KB && KB.ki && KB.ki.privatGeraet && KB.ki.privatGeraet()) && localStorage.getItem('ansicht') !== 'oeffentlich'; } catch (e) { return false; } })();
   document.documentElement.classList.toggle('oeffentlich', !PRIVAT);
   /* Impressum und Datenschutz der Firmen-Webseite – Adressen hier eintragen, dann erscheinen die Links unten auf der Startseite */
   const RECHTLICHES = { impressum: 'https://www.thomas-willwacher.de/impressum.html', datenschutz: 'https://www.thomas-willwacher.de/datenschutz.html' };
@@ -413,6 +413,7 @@
       (KB.REGAL[g.id] || []).map(([ids, koch, h]) => regalReiheHTML(ids, koch, h)),
       KB.KUECHEN.filter(k => k.gruppe === g.id).map(k => k.id))).join('');
     main.innerHTML = `
+      <span class="kb-version kb-version-start" data-tw-version></span>
 ${legendenHTML()}
       <h1 class="tt tt-gross" aria-label="Was isst die Welt?">${TITEL_HTML}</h1>
       <header class="start-kopf2">
@@ -783,6 +784,7 @@ ${legendenHTML()}
           <a href="#/favoriten" title="Favoriten" data-nav="favoriten">${I.herz}<span class="txt">Favoriten</span><span class="zahl" id="zahl-fav" hidden></span></a>
           <a href="#/einkauf" title="Einkauf" data-nav="einkauf">${I.korb}<span class="txt">Einkauf</span><span class="zahl" id="zahl-einkauf" hidden></span></a>
         </nav>
+        <span class="kb-version" data-tw-version></span>
       </div></header>
       <main id="inhalt" tabindex="-1"></main>
       <div class="timerleiste" id="timerleiste" aria-live="polite"></div>`;
@@ -1412,12 +1414,6 @@ ${legendenHTML()}
     main.innerHTML = `<a class="zurueck" href="#/">${I.pfeilL} Startseite</a>
       <div class="band"><div class="band-text"><h1>KI-Menüplaner</h1>
         <p>Sag in ein, zwei Sätzen, was du vorhast – Anlass, Personen, Vorlieben, Zeit. Die KI stellt daraus ein Menü aus den ${KB.INDEX.length} Rezepten im Buch zusammen, mit Zeitplan für die Küche.</p></div></div>
-      ${KB.ki.bereit() ? '' : `<div class="kachel abschnitt" id="ki-ohne" style="margin-bottom:14px;border-left:4px solid var(--safran)">
-        <h2 style="font-size:19px">Google-KI noch nicht verbunden</h2>
-        <p style="font-family:var(--ui);font-size:16px">Die KI läuft über dein Google-Konto mit dem Schlüssel aus der Master-App. Öffne die Master-App einmal in diesem Browser – danach ist der KI-Menüplaner automatisch verbunden. Du kannst den Gemini-Schlüssel auch hier eintragen (<a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Schlüssel bei Google AI Studio</a>).</p>
-        <form id="ki-key" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><label class="versteckt" for="ki-key-feld">Gemini-Schlüssel</label>
-          <input id="ki-key-feld" type="password" placeholder="Gemini-Schlüssel einfügen" style="flex:1;min-width:220px;height:44px;border:1px solid var(--linie);border-radius:22px;padding:0 16px;background:var(--kachel-2)">
-          <button class="knopf">Speichern</button></form></div>`}
       <form class="kachel abschnitt" id="ki-form" style="margin-bottom:14px">
         <label for="ki-text" style="font-weight:600">Dein Wunsch</label>
         <div style="display:flex;gap:8px;margin-top:8px;align-items:flex-start">
@@ -1430,8 +1426,6 @@ ${legendenHTML()}
       </form>
       <div id="ki-ergebnis" aria-live="polite"></div>`;
     if (kiLetzte) zeigeKI(kiLetzte);
-    const kf = $('#ki-key');
-    if (kf) kf.onsubmit = e => { e.preventDefault(); const v = $('#ki-key-feld').value.trim(); if (v.length > 20) { KB.ki.setzeSchluessel(v); meldung('Schlüssel gespeichert'); route(); } };
     $$('[data-bsp]', main).forEach(b => b.onclick = () => { $('#ki-text').value = b.dataset.bsp; $('#ki-text').focus(); });
     const neu = $('#ki-neu'); if (neu) neu.onclick = () => { kiVerlauf.length = 0; kiLetzte = null; route(); };
     $('#ki-form').onsubmit = async e => {
@@ -1447,8 +1441,7 @@ ${legendenHTML()}
         kiLetzte = d; $('#ki-text').value = ''; zeigeKI(d);
       } catch (err) {
         kiVerlauf.pop();
-        box.innerHTML = `<div class="leer-hinweis">${err.ohneSchluessel ? 'Noch kein Google-Schlüssel da. Öffne einmal die Master-App in diesem Browser oder trag den Schlüssel oben ein.'
-          : err.falscherSchluessel ? 'Google lehnt den Schlüssel ab. Bitte in der Master-App den Gemini-Schlüssel prüfen.' : esc(err.message)}</div>`;
+        box.innerHTML = `<div class="leer-hinweis">${esc(err.message)}</div>`;
       }
     };
     const mik = $('#ki-mikro');
@@ -1518,6 +1511,15 @@ ${legendenHTML()}
     window.addEventListener('hashchange', route);
     route();
     if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
+    /* „Neue Version – jetzt aktualisieren“ (lib/tw-version.js): vorher den neuen Offline-Speicher fertig laden lassen,
+       sonst zeigt der Neustart noch einmal die alte Startdatei aus dem Zwischenspeicher. Favoriten/Einkauf liegen schon sicher im Gerät. */
+    window.twVorAktualisieren = async () => {
+      if (!navigator.serviceWorker) return;
+      const reg = await navigator.serviceWorker.getRegistration(); if (!reg) return;
+      await reg.update().catch(() => {});
+      const w = reg.installing || reg.waiting; if (!w) return;
+      await new Promise(ok => { const fertig = () => { if (w.state === 'activated' || w.state === 'redundant') ok(); }; w.addEventListener('statechange', fertig); fertig(); setTimeout(ok, 9000); });
+    };
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', los); else los();
 })();

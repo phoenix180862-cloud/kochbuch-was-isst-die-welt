@@ -919,3 +919,22 @@ h2.zwischen { font-family: var(--logo); font-weight: 600; margin: 24px 0 8px; }
   .km-fuss { padding: 10px; }
   .km-fuss .knopf { font-size: 16px; }
 }
+
+/* Versionsanzeige oben rechts (gemeinsamer Baustein lib/tw-version.js, 04.11.2026) */
+.kopf .kb-version { flex: none; margin-left: auto; background: rgba(15,25,35,.55); border-color: var(--linie); color: #c9d3de; }
+.nav + .kb-version { margin-left: 0; }
+body.ist-start main { position: relative; }
+main .kb-version-start { position: absolute; top: 10px; right: 16px; z-index: 3; background: rgba(15,25,35,.75); border-color: var(--linie); color: #c9d3de; }
+/* Tablet/Handy: Pille hängt klein an der Unterkante der Kopfleiste – nimmt Suche und Menü keinen Platz */
+@media (max-width: 1250px) {
+  .kopf .kb-version { position: absolute; right: 16px; bottom: -10px; font-size: 10.5px; padding: 2px 9px; background: #13202e; z-index: 2; }
+}
+@media (max-width: 760px) {
+  main .kb-version-start { top: 6px; right: 10px; font-size: 10.5px; padding: 2px 9px; }
+}
+/* Tablet quer (761–1080 px): Menüleiste etwas enger, damit die Kopfleiste nicht 2 px seitlich überläuft */
+@media (max-width: 1080px) and (min-width: 761px) {
+  .kopf-innen { gap: 12px; }
+  .nav { gap: 0; }
+  .nav a { padding: 8px 9px; }
+}
